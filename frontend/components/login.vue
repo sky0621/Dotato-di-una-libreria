@@ -1,8 +1,7 @@
 <template>
-  <v-app light>
-    <div>NOW MAKING DEFAULT LAYOUT</div>
-    <nuxt />
-  </v-app>
+  <div>
+    NOW MAKING LOGIN FORM
+  </div>
 </template>
 
 <script>
@@ -12,3 +11,6 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+</style>

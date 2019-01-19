@@ -1,11 +1,11 @@
+import webpack from 'webpack'
 const pkg = require('./package')
-
-
-const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
+const environment = process.env.NODE_ENV || 'development'
+const envSet = require(`./env.${environment}.js`)
 
 module.exports = {
   mode: 'spa',
-
+  env: envSet,
   /*
   ** Headers of the page
   */
@@ -34,16 +34,21 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [
-    '~/assets/style/app.styl'
-  ],
+  css: ['~/assets/style/app.styl'],
+
+  /*
+  ** Router
+   */
+  router: {
+    // パスが変更されるたびに以下のミドルウェアが呼び出される
+    middleware: ['route'],
+    mode: 'hash'
+  },
 
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [
-    '@/plugins/vuetify'
-  ],
+  plugins: ['@/plugins/vuetify'],
 
   /*
   ** Nuxt.js modules
@@ -63,14 +68,6 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    transpile: ['vuetify/lib'],
-    plugins: [new VuetifyLoaderPlugin()],
-    loaders: {
-      stylus: {
-        import: ["~assets/style/variables.styl"]
-      }
-    },
-    
     /*
     ** You can extend webpack config here
     */
@@ -84,6 +81,16 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    }
+      config.devtool = 'inline-source-map'
+    },
+    plugins: [
+      new webpack.ProvidePlugin({
+        _: 'lodash'
+      })
+    ]
+  },
+
+  generate: {
+    dir: '../backend/view/dist/'
   }
 }
