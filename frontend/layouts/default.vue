@@ -1,14 +1,5 @@
 <template>
   <v-app light>
-    <div>NOW MAKING DEFAULT LAYOUT</div>
     <nuxt />
   </v-app>
 </template>
-
-<script>
-export default {
-  data() {
-    return {}
-  }
-}
-</script>

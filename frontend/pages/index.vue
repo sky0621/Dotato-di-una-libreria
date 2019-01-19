@@ -1,11 +1,15 @@
 <template>
   <v-content>
-    NOW MAKING INDEX PAGES
+    <notice />
   </v-content>
 </template>
 
 <script>
+import notice from '~/components/notice.vue'
+
 export default {
-  components: {}
+  components: {
+    notice
+  }
 }
 </script>

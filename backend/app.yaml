@@ -1,0 +1,17 @@
+runtime: go111
+
+default_expiration: "10s"
+
+handlers:
+  - url: /_nuxt
+    static_dir: view/dist/_nuxt
+    secure: always
+
+  - url: /
+    static_files: view/dist/index.html
+    upload: view/dist/index.html
+    secure: always
+
+  - url: /api/vi/.*
+    script: auto
+    secure: always
