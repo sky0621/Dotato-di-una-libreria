@@ -1,16 +1,37 @@
 
 ```
-$ npx create-nuxt-app frontend
-npx: 402個のパッケージを12.304秒でインストールしました。
-> Generating Nuxt.js project in /work/src/golang111/src/github.com/sky0621/Dotato-di-una-libreria/frontend
+$ yarn create nuxt-app frontend
+yarn create v1.12.3
+
+    ~~省略~~
+
 ? Project name frontend
-? Project description My finest Nuxt.js project
+? Project description My badass Nuxt.js project
 ? Use a custom server framework none
+? Choose features to install Linter / Formatter, Prettier, Axios
 ? Use a custom UI framework vuetify
+? Use a custom test framework jest
 ? Choose rendering mode Single Page App
-? Use axios module yes
-? Use eslint yes
-? Use prettier no
 ? Author name sky0621
-? Choose a package manager npm
+? Choose a package manager yarn
+
+    ~~省略~~
+
+	To get started:
+
+	cd frontend
+	 yarn run dev
+
+  To build & start for production:
+
+	cd frontend
+	 yarn run build
+	 yarn start
+
+  To test:
+
+	cd frontend
+	 yarn run test
+
+Done in 301.78s.
 ```
