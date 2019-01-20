@@ -39,6 +39,14 @@ export default {
     }
   },
 
+  async mounted() {
+    await firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+      } else {
+      }
+    })
+  },
+
   methods: {
     async login() {
       await firebase
