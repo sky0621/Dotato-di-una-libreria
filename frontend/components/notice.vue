@@ -3,7 +3,7 @@
     class="py-3"
   >
     <v-list two-line>
-      <v-list-tile v-for="notice in notices" :key="notice">
+      <v-list-tile v-for="notice in notices" :key="notice.id">
         <v-list-tile-content class="mb-2">
           <v-list-tile-title>{{ notice.sentence }}</v-list-tile-title>
         </v-list-tile-content>
