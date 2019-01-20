@@ -16,19 +16,13 @@
 export default {
   data() {
     return {
-      notices: ['お知らせ１', 'お知らせ２']
+      notices: []
     }
   },
 
   mounted() {
     this.$axios
-      .get(
-        process.env.apiBaseUrl + '/notices',
-        {},
-        {
-          timeout: 300000
-        }
-      )
+      .get(process.env.apiBaseUrl + '/notices')
       .then(res => {
         console.log(res.data)
         this.notices = res.data
