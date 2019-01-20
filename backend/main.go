@@ -72,6 +72,13 @@ func main() {
 	db.DB().SetMaxIdleConns(csqlSetting.MaxIdleConns)
 	db.DB().SetMaxOpenConns(csqlSetting.MaxOpenConns)
 
+	// TODO: 本来はローカル環境用だけど、ひとまずGAE環境でも同じレコードを投入してしまう
+	// ダミーレコードを投入しておく
+	err = system.SetupLocalRecord(db)
+	if err != nil {
+		appLgr.Panicw(err.Error())
+	}
+
 	// --------------------------------------------------------------
 	// Webサーバーのセッティング
 	// --------------------------------------------------------------
