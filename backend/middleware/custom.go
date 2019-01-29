@@ -31,6 +31,7 @@ type CustomContext interface {
 	GetLog() logger.AppLogger
 	GetDB() *gorm.DB
 	GetFirebaseApp() *firebase.App
+	GetRequest() *http.Request
 }
 
 type customContext struct {
@@ -54,6 +55,11 @@ func (c *customContext) GetDB() *gorm.DB {
 // GetFirebaseApp ...
 func (c *customContext) GetFirebaseApp() *firebase.App {
 	return c.firebaseApp
+}
+
+// GetRequest ...
+func (c *customContext) GetRequest() *http.Request {
+	return c.GetRequest()
 }
 
 // GetCustomContext ...

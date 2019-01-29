@@ -4,6 +4,11 @@ import (
 	"Dotato-di-una-libreria/backend/logger"
 	"Dotato-di-una-libreria/backend/middleware"
 	"Dotato-di-una-libreria/backend/model"
+	"context"
+
+	"firebase.google.com/go/auth"
+
+	"github.com/pkg/errors"
 
 	firebase "firebase.google.com/go"
 
@@ -19,6 +24,7 @@ type userService struct {
 	lgr         logger.AppLogger
 	db          *gorm.DB
 	firebaseApp *firebase.App
+	requestCtx  context.Context
 }
 
 // NewUser ...
@@ -27,14 +33,36 @@ func NewUser(ctx middleware.CustomContext) UserService {
 		lgr:         ctx.GetLog(),
 		db:          ctx.GetDB(),
 		firebaseApp: ctx.GetFirebaseApp(),
+		requestCtx:  ctx.GetRequest().Context(),
 	}
 }
 
 // ListUser ...
-func (n *userService) CreateUser(u *model.User) error {
-	n.lgr.Path("service/ListUser").Infow("Start")
+func (s *userService) CreateUser(u *model.User) (err error) {
+	s.lgr.Path("service/ListUser").Infow("Start")
 
-	// FIXME: トランザクション張って、ここでDB登録後にFirebaseAuthのCreateUserを行う！
+	tx := s.db.Begin()
+	defer func() {
+		if tx != nil {
+			db := tx.Commit()
+			if e := db.Error; e != nil {
+				s.lgr.Errorw("Transaction commit failed.", "error", e)
+				err = errors.Wrap(err, e.Error())
+			}
+		}
+	}()
 
-	return model.NewUserDao(n.lgr, n.db, n.firebaseApp).CreateUser(u)
+	err = model.NewUserDao(s.lgr, tx, s.firebaseApp).CreateUser(u)
+	if err != nil {
+		s.lgr.Errorw("", "error", err)
+		return
+	}
+
+	var fbAuth *auth.Client
+	fbAuth, err = s.firebaseApp.Auth(s.requestCtx)
+	if err != nil {
+
+	}
+
+	return nil
 }
