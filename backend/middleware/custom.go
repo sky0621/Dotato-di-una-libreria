@@ -4,6 +4,8 @@ import (
 	"Dotato-di-una-libreria/backend/logger"
 	"net/http"
 
+	firebase "firebase.google.com/go"
+
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
@@ -12,16 +14,15 @@ import (
 )
 
 // SetupCustom ...
-func SetupCustom(e *echo.Echo, appLgr logger.AppLogger, db *gorm.DB) {
+func SetupCustom(e *echo.Echo, appLgr logger.AppLogger, db *gorm.DB, firebaseApp *firebase.App) {
 	// コンテキストにDB接続情報等を積んで引き回していくためのカスタマイズ
-	e.Use(CustomContextMiddleware())
+	e.Use(customContextMiddleware())
 
 	// 順番がとても大事！
-	e.Use(RequestID())
-	e.Use(CustomLoggerMiddleware(appLgr))
-	e.Use(RelationalDBAccessor(db))
-
-	//e.Use(WithCredentialsMiddleware())
+	e.Use(requestIDMiddleware())
+	e.Use(customLoggerMiddleware(appLgr))
+	e.Use(gormDBMiddleware(db))
+	e.Use(firebaseAppMiddleware(firebaseApp))
 }
 
 // CustomContext ... Cloud SQLアクセッサ等をcontrollerで受け取れるよう、Echoコンテキストを拡張
@@ -29,13 +30,15 @@ type CustomContext interface {
 	echo.Context
 	GetLog() logger.AppLogger
 	GetDB() *gorm.DB
+	GetFirebaseApp() *firebase.App
 }
 
 type customContext struct {
 	echo.Context
-	log       logger.AppLogger
-	db        *gorm.DB
-	requestID string
+	log         logger.AppLogger
+	db          *gorm.DB
+	firebaseApp *firebase.App
+	requestID   string
 }
 
 // GetLog ...
@@ -48,13 +51,17 @@ func (c *customContext) GetDB() *gorm.DB {
 	return c.db
 }
 
+// GetFirebaseApp ...
+func (c *customContext) GetFirebaseApp() *firebase.App {
+	return c.firebaseApp
+}
+
 // GetCustomContext ...
 func GetCustomContext(c echo.Context) CustomContext {
 	return c.(*customContext)
 }
 
-// CustomContextMiddleware ...
-func CustomContextMiddleware() echo.MiddlewareFunc {
+func customContextMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			cc := &customContext{
@@ -65,8 +72,7 @@ func CustomContextMiddleware() echo.MiddlewareFunc {
 	}
 }
 
-// RequestID ...
-func RequestID() echo.MiddlewareFunc {
+func requestIDMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			cctx, ok := c.(*customContext)
@@ -84,8 +90,7 @@ func RequestID() echo.MiddlewareFunc {
 	}
 }
 
-// CustomLoggerMiddleware ...
-func CustomLoggerMiddleware(appLgr logger.AppLogger) echo.MiddlewareFunc {
+func customLoggerMiddleware(appLgr logger.AppLogger) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			cctx, ok := c.(*customContext)
@@ -99,8 +104,7 @@ func CustomLoggerMiddleware(appLgr logger.AppLogger) echo.MiddlewareFunc {
 	}
 }
 
-// RelationalDBAccessor ... Cloud SQLアクセッサを各HTTPリクエスト処理メソッド内で使用可能にするミドルウェア（デコレータ）
-func RelationalDBAccessor(db *gorm.DB) echo.MiddlewareFunc {
+func gormDBMiddleware(db *gorm.DB) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			cctx, ok := c.(*customContext)
@@ -114,15 +118,14 @@ func RelationalDBAccessor(db *gorm.DB) echo.MiddlewareFunc {
 	}
 }
 
-// WithCredentialsMiddleware ...
-func WithCredentialsMiddleware() echo.MiddlewareFunc {
+func firebaseAppMiddleware(firebaseApp *firebase.App) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			cctx, ok := c.(*customContext)
 			if !ok {
 				return echo.NewHTTPError(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 			}
-			cctx.Response().Header().Set(echo.HeaderAccessControlAllowCredentials, "true")
+			cctx.firebaseApp = firebaseApp
 			return next(cctx)
 		}
 	}

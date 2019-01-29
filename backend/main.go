@@ -9,6 +9,8 @@ import (
 	"context"
 	"fmt"
 
+	firebase "firebase.google.com/go"
+
 	"github.com/labstack/echo"
 
 	"cloud.google.com/go/datastore"
@@ -79,6 +81,14 @@ func main() {
 		appLgr.Panicw(err.Error())
 	}
 
+	// -----------------------------------------------------
+	// Firebase Admin SDK初期化
+	// -----------------------------------------------------
+	firebaseApp, err = firebase.NewApp(context.Background(), nil)
+	if err != nil {
+		appLgr.Panicw("error initializing app", "err", err)
+	}
+
 	// --------------------------------------------------------------
 	// Webサーバーのセッティング
 	// --------------------------------------------------------------
@@ -92,7 +102,7 @@ func main() {
 	middleware.SetupBasic(e, apiKey)
 
 	// カスタムミドルウェアセッティング
-	middleware.SetupCustom(e, appLgr, db)
+	middleware.SetupCustom(e, appLgr, db, firebaseApp)
 
 	// ルーティング設定の起点
 	controller.Routing(e)
