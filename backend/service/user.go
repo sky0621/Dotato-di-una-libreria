@@ -8,8 +8,6 @@ import (
 
 	"firebase.google.com/go/auth"
 
-	"github.com/pkg/errors"
-
 	firebase "firebase.google.com/go"
 
 	"github.com/jinzhu/gorm"
@@ -38,31 +36,34 @@ func NewUser(ctx middleware.CustomContext) UserService {
 }
 
 // ListUser ...
-func (s *userService) CreateUser(u *model.User) (err error) {
+func (s *userService) CreateUser(u *model.User) error {
 	s.lgr.Path("service/ListUser").Infow("Start")
 
 	tx := s.db.Begin()
 	defer func() {
 		if tx != nil {
 			db := tx.Commit()
-			if e := db.Error; e != nil {
-				s.lgr.Errorw("Transaction commit failed.", "error", e)
-				err = errors.Wrap(err, e.Error())
+			if err := db.Error; err != nil {
+				s.lgr.Errorw("Transaction commit failed.", "error", err)
 			}
 		}
 	}()
 
-	err = model.NewUserDao(s.lgr, tx, s.firebaseApp).CreateUser(u)
+	err := model.NewUserDao(s.lgr, tx, s.firebaseApp).CreateUser(u)
 	if err != nil {
-		s.lgr.Errorw("", "error", err)
-		return
+		s.lgr.Errorw("@userDao#CreateUser", "error", err)
+		return err
 	}
 
-	var fbAuth *auth.Client
-	fbAuth, err = s.firebaseApp.Auth(s.requestCtx)
+	fbAuth, err := s.firebaseApp.Auth(s.requestCtx)
 	if err != nil {
-
+		s.lgr.Errorw("@firebase.GetAuth", "error", err)
+		return err
 	}
+	fbUser := &auth.UserToCreate{}
+	fbUser.Email(u.Mail)
+	fbUser.Password(u.Password)
+	fbAuth.CreateUser(s.requestCtx, fbUser)
 
 	return nil
 }
