@@ -8,9 +8,9 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_USER: testuser
-      MYSQL_PASSWORD: testpass
-      MYSQL_DATABASE: testdb
+      MYSQL_USER: localuser
+      MYSQL_PASSWORD: localpass
+      MYSQL_DATABASE: localdb
     volumes:
       - ./persistence/init:/docker-entrypoint-initdb.d
 

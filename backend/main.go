@@ -9,6 +9,8 @@ import (
 	"context"
 	"fmt"
 
+	"google.golang.org/api/option"
+
 	firebase "firebase.google.com/go"
 
 	"github.com/labstack/echo"
@@ -84,7 +86,13 @@ func main() {
 	// -----------------------------------------------------
 	// Firebase Admin SDK初期化
 	// -----------------------------------------------------
-	firebaseApp, err = firebase.NewApp(context.Background(), nil)
+	var firebaseApp *firebase.App
+	if util.IsLocal() {
+		opt := option.WithCredentialsFile("/home/sky0621/work/var/firebase/firebase-adminsdk.json")
+		firebaseApp, err = firebase.NewApp(context.Background(), nil, opt)
+	} else {
+		firebaseApp, err = firebase.NewApp(context.Background(), nil)
+	}
 	if err != nil {
 		appLgr.Panicw("error initializing app", "err", err)
 	}
@@ -109,6 +117,6 @@ func main() {
 
 	// TODO: Go1.11ではappengine.Main()は必須ではないが、↓の問題があるので、ひとまず使っておく。
 	// https://github.com/gcpug/nouhau/issues/71
-	appengine.Main()
-	//e.Logger.Fatal(e.Start(":8080"))
+	//appengine.Main()
+	e.Logger.Fatal(e.Start(":8080"))
 }
