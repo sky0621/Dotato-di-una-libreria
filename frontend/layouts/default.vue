@@ -1,5 +1,5 @@
 <template>
-  <v-app light>
+  <v-app dark>
     <v-btn
       class="mx-1 my-2 px-3 py-2 lime"
       @click="logout"

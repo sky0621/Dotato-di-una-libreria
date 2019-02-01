@@ -1,5 +1,5 @@
 <template>
-  <v-app light>
+  <v-app dark>
     <nuxt />
   </v-app>
 </template>
