@@ -1,12 +1,21 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-btn
       class="mx-1 my-2 px-3 py-2 lime"
       @click="logout"
     >
       LOGOUT
     </v-btn>
-    <nuxt />
+    <v-content>
+      <nuxt />
+    </v-content>
+    <v-footer
+      fixed
+      app
+      color="primary"
+    >
+      Dotato-di-una-libreria
+    </v-footer>
   </v-app>
 </template>
 
