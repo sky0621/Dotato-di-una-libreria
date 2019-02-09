@@ -1,3 +1,3 @@
-export default function({ route }) {
+export default function ({ route }) {
   console.log('route.path: ', route.path)
 }

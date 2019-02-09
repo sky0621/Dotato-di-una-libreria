@@ -28,11 +28,11 @@ export default {
       await firebase
         .auth()
         .signOut()
-        .then(res => {
+        .then((res) => {
           // ログアウト正常終了時はログイン画面に遷移する。
           this.$router.push('/login')
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(
             'errorCode:' + error.code + ', errorMessage:' + error.message
           )

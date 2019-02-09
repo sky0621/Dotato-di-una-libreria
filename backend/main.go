@@ -117,6 +117,6 @@ func main() {
 
 	// TODO: Go1.11ではappengine.Main()は必須ではないが、↓の問題があるので、ひとまず使っておく。
 	// https://github.com/gcpug/nouhau/issues/71
-	//appengine.Main()
-	e.Logger.Fatal(e.Start(":8080"))
+	appengine.Main()
+	//e.Logger.Fatal(e.Start(":8080"))
 }

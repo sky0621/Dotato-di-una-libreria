@@ -23,11 +23,11 @@ export default {
   mounted() {
     this.$axios
       .get(process.env.apiBaseUrl + '/notices')
-      .then(res => {
+      .then((res) => {
         console.log(res.data)
         this.notices = res.data
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err)
       })
   }

@@ -40,7 +40,7 @@ export default {
   },
 
   async mounted() {
-    await firebase.auth().onAuthStateChanged(user => {
+    await firebase.auth().onAuthStateChanged((user) => {
       if (user) {
       } else {
       }
@@ -52,11 +52,11 @@ export default {
       await firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .then(res => {
+        .then((res) => {
           // ログイン正常終了時はログイン後の初期画面に遷移する。
           this.$router.push('/')
         })
-        .catch(error => {
+        .catch((error) => {
           this.errMsg = error.message
           console.log(
             'errorCode:' + error.code + ', errorMessage:' + error.message

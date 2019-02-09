@@ -8,7 +8,7 @@ yarn create v1.12.3
 ? Project name frontend
 ? Project description My badass Nuxt.js project
 ? Use a custom server framework none
-? Choose features to install Linter / Formatter, Prettier, Axios
+? Choose features to install Linter / Formatter, Axios
 ? Use a custom UI framework vuetify
 ? Use a custom test framework jest
 ? Choose rendering mode Single Page App
