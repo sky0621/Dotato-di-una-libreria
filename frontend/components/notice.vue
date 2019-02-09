@@ -2,13 +2,21 @@
   <v-layout
     class="ma-2"
   >
-    <v-list two-line>
-      <v-list-tile v-for="notice in notices" :key="notice.id">
-        <v-list-tile-content class="mb-2">
-          <v-list-tile-title>{{ notice.sentence }}</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-    </v-list>
+    <v-expansion-panel focusable>
+      <v-expansion-panel-content
+        v-for="notice in notices"
+        :key="notice.id"
+      >
+        <div slot="header">
+          {{ notice.sentence }}
+        </div>
+        <v-card>
+          <v-card-text class="lime lighten-4">
+            お知らせの詳細な内容を、ごにょごにょ〜〜〜〜〜〜〜〜〜〜〜。
+          </v-card-text>
+        </v-card>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
   </v-layout>
 </template>
 

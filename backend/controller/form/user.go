@@ -5,7 +5,7 @@ import "Dotato-di-una-libreria/backend/model"
 // User ...
 type User struct {
 	Name     string `json:"name"`
-	Mail     string `json:"mail"`
+	Mail     string `json:"email"`
 	Password string `json:"password"`
 }
 
