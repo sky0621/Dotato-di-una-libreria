@@ -1,20 +1,32 @@
 <template>
   <v-app>
-    <v-btn
-      class="mx-1 my-2 px-3 py-2 lime"
-      @click="logout"
-    >
-      LOGOUT
-    </v-btn>
+    <v-toolbar dark color="primary" class="font-italic">
+      <v-icon>library_books</v-icon>
+
+      <v-toolbar-title>
+        Dotato-di-una-libreria
+      </v-toolbar-title>
+
+      <v-spacer />
+
+      <v-btn icon @click="home">
+        <v-icon>home</v-icon>
+      </v-btn>
+
+      <v-btn icon @click="signup">
+        <v-icon>person_add</v-icon>
+      </v-btn>
+
+      <v-btn icon @click="logout">
+        <v-icon>exit_to_app</v-icon>
+      </v-btn>
+    </v-toolbar>
     <v-content>
       <nuxt />
     </v-content>
-    <v-footer
-      fixed
-      app
-      color="primary"
-    >
-      Dotato-di-una-libreria
+    <v-footer dark color="primary" class="pa-3">
+      <v-spacer />
+      <div>&copy; {{ new Date().getFullYear() }}</div>
     </v-footer>
   </v-app>
 </template>
@@ -24,6 +36,12 @@ import firebase from '~/plugins/firebase'
 
 export default {
   methods: {
+    home() {
+      this.$router.push('/')
+    },
+    signup() {
+      this.$router.push('/signup')
+    },
     async logout() {
       await firebase
         .auth()

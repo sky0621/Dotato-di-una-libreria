@@ -1,6 +1,6 @@
 <template>
   <v-layout
-    class="py-3"
+    class="ma-2"
   >
     <v-list two-line>
       <v-list-tile v-for="notice in notices" :key="notice.id">
