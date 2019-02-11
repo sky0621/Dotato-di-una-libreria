@@ -53,12 +53,14 @@ func (s *userService) CreateUser(u *model.User) error {
 	u.ID = util.CreateUniqueID()
 	err := model.NewUserDao(s.lgr, tx, s.firebaseApp).CreateUser(u)
 	if err != nil {
+		tx.Rollback()
 		s.lgr.Errorw("@userDao#CreateUser", "error", err)
 		return err
 	}
 
 	fbAuth, err := s.firebaseApp.Auth(s.requestCtx)
 	if err != nil {
+		tx.Rollback()
 		s.lgr.Errorw("@firebase.GetAuth", "error", err)
 		return err
 	}
@@ -67,6 +69,7 @@ func (s *userService) CreateUser(u *model.User) error {
 	fbUser.Password(u.Password)
 	_, err = fbAuth.CreateUser(s.requestCtx, fbUser)
 	if err != nil {
+		tx.Rollback()
 		s.lgr.Errorw("@firebase.CreateUser", "error", err)
 		return err
 	}
