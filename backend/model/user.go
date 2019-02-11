@@ -15,7 +15,7 @@ type User struct {
 	ID       string `gorm:"column:id;primary_key"`
 	Name     string `gorm:"column:name;type:varchar(256);not null"`
 	Mail     string `gorm:"column:mail;type:varchar(256);not null"`
-	Password string
+	Password string `gorm:"-"`
 	AuditItem
 }
 

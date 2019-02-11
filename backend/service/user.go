@@ -4,6 +4,7 @@ import (
 	"Dotato-di-una-libreria/backend/logger"
 	"Dotato-di-una-libreria/backend/middleware"
 	"Dotato-di-una-libreria/backend/model"
+	"Dotato-di-una-libreria/backend/util"
 	"context"
 
 	"firebase.google.com/go/auth"
@@ -26,12 +27,12 @@ type userService struct {
 }
 
 // NewUser ...
-func NewUser(ctx middleware.CustomContext) UserService {
+func NewUser(ctx middleware.CustomContext, requestCtx context.Context) UserService {
 	return &userService{
 		lgr:         ctx.GetLog(),
 		db:          ctx.GetDB(),
 		firebaseApp: ctx.GetFirebaseApp(),
-		requestCtx:  ctx.GetRequest().Context(),
+		requestCtx:  requestCtx,
 	}
 }
 
@@ -49,6 +50,7 @@ func (s *userService) CreateUser(u *model.User) error {
 		}
 	}()
 
+	u.ID = util.CreateUniqueID()
 	err := model.NewUserDao(s.lgr, tx, s.firebaseApp).CreateUser(u)
 	if err != nil {
 		s.lgr.Errorw("@userDao#CreateUser", "error", err)

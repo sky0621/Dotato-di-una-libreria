@@ -25,7 +25,7 @@ func createUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, errorJSON(http.StatusBadRequest, errUser.Error()))
 	}
 
-	if err := service.NewUser(ctx).CreateUser(user.ParseToDto()); err != nil {
+	if err := service.NewUser(ctx, c.Request().Context()).CreateUser(user.ParseToDto()); err != nil {
 		log.Warnw(err.Error())
 		return c.JSON(http.StatusBadRequest, errorJSON(http.StatusBadRequest, err.Error()))
 	}
