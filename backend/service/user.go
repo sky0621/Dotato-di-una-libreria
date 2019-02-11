@@ -65,7 +65,11 @@ func (s *userService) CreateUser(u *model.User) error {
 	fbUser := &auth.UserToCreate{}
 	fbUser.Email(u.Mail)
 	fbUser.Password(u.Password)
-	fbAuth.CreateUser(s.requestCtx, fbUser)
+	_, err = fbAuth.CreateUser(s.requestCtx, fbUser)
+	if err != nil {
+		s.lgr.Errorw("@firebase.CreateUser", "error", err)
+		return err
+	}
 
 	return nil
 }
