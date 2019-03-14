@@ -4,4 +4,4 @@
 
 基本的にロジックは持たない。
 
-[DDD](http://domainlanguage.com/wp-content/uploads/2016/05/DDD_Reference_2015-03.pdf)における「Entities」に該当する？
+[DDD](http://domainlanguage.com/wp-content/uploads/2016/05/DDD_Reference_2015-03.pdf)における「Entities」に相当する？
