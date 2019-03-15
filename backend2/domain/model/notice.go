@@ -2,14 +2,17 @@ package model
 
 import (
 	vo "Dotato-di-una-libreria/backend2/domain/valueobject"
+	"time"
 )
 
 // Notice ... 「お知らせ」データ定義
 type Notice struct {
-	ID       vo.UniqueID
-	Title    string
-	Sentence string
-	Severity vo.NoticeSeverity
+	ID          vo.UniqueID
+	Title       string
+	Detail      string
+	Severity    vo.NoticeSeverity
+	PublishedAt time.Time
+	PublishFlg  vo.NoticePublishFlg
 }
 
 // NoticeCommandCondition ... 条件に該当する「お知らせ」データを決定するために利用
