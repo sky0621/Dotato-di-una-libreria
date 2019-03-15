@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"Dotato-di-una-libreria/backend2/domain/error"
 	"Dotato-di-una-libreria/backend2/domain/model"
 	vo "Dotato-di-una-libreria/backend2/domain/valueobject"
 	"context"
@@ -8,22 +9,45 @@ import (
 
 // NoticeCommandRepository ... 「お知らせ」データへのCRUDのうち、Commandに該当するCUDを担う。
 type NoticeCommandRepository interface {
-	// Create ... 引数で渡された「お知らせ」データ１件を作成する。（作成した「お知らせ」データを返却する。）
-	Create(context.Context, *model.Notice) (*model.Notice, error)
+	/*
+	 * 新規登録
+	 */
+	// Create ... 引数で渡された「お知らせ」データ１件を作成する。
+	Create(context.Context, *model.Notice) error.ApplicationError
 
-	// Update ... 引数で渡された「お知らせ」データ１件を更新する。（更新した「お知らせ」データを返却する。）
-	Update(context.Context, *model.Notice) (*model.Notice, error)
+	// CreateBatch ... 引数で渡された「お知らせ」データ複数件を作成する。
+	CreateBatch(context.Context, []*model.Notice) error.ApplicationError
 
-	// Delete ... 引数で渡されたユニークIDで特定される「お知らせ」データ１件を削除する。（削除した「お知らせ」データを返却する。）
-	Delete(context.Context, vo.UniqueID) (*model.Notice, error)
+	/*
+	 * 更新
+	 */
+	// UpdateByUniqueID ... 引数で渡された「お知らせ」データに含まれるIDを条件に１件を更新する。
+	UpdateByUniqueID(context.Context, *model.Notice) error.ApplicationError
 
-	// FIXME: 要件に応じて、 CreateBatch(~~) や UpdateBatch(~~) といった、複数の「お知らせ」データを一括で処理するメソッドも定義する。
+	// UpdateByCondition ... 引数で渡された「お知らせ」データ更新条件に合致する複数の「お知らせ」データを更新する。
+	UpdateByCondition(context.Context, *model.NoticeCommandCondition, *model.Notice) error.ApplicationError
+
+	// UpdateBatch ... 引数で渡された「お知らせ」データ複数件を更新する。
+	UpdateBatch(context.Context, []*model.Notice) error.ApplicationError
+
+	/*
+	 * 削除
+	 */
+	// DeleteByUniqueID ... 引数で渡されたユニークIDで特定される「お知らせ」データ１件を削除する。
+	DeleteByUniqueID(context.Context, vo.UniqueID) error.ApplicationError
+
+	// DeleteByCondition ... 引数で渡された「お知らせ」データ削除条件に合致する複数の「お知らせ」データを削除する。
+	DeleteByCondition(context.Context, *model.NoticeCommandCondition) error.ApplicationError
+
+	// DeleteBatch ... 引数で渡されたユニークIDで特定される「お知らせ」データ複数件を削除する。
+	DeleteBatch(context.Context, []vo.UniqueID) error.ApplicationError
 }
 
 // NoticeQueryRepository ... 「お知らせ」データへのCRUDのうち、Queryに該当するRを担う。
 type NoticeQueryRepository interface {
-	// Read ... 引数で渡された「お知らせ」データ取得条件に合致する複数の「お知らせ」データを返却する。（取得条件が nil の場合は全ての「お知らせ」データを返却する。）
-	Read(context.Context, *model.NoticeReadCondition) ([]*model.Notice, error)
+	// GetByUniqueID ... 引数で渡されたユニークIDで特定される「お知らせ」データ１件を取得する。（取得対象が存在しない場合は nil を返却する。）
+	GetByUniqueID(context.Context, vo.UniqueID) (*model.Notice, error.ApplicationError)
 
-	// FIXME: １件取得用のメソッド定義を検討する。
+	// GetByCondition ... 引数で渡された「お知らせ」データ取得条件に合致する複数の「お知らせ」データを返却する。（取得条件が nil の場合は全ての「お知らせ」データを返却する。）
+	GetByCondition(context.Context, *model.NoticeReadCondition) ([]*model.Notice, error.ApplicationError)
 }
