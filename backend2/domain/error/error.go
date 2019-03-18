@@ -5,6 +5,10 @@ import "fmt"
 // ErrorID ... アプリケーションエラーの識別子
 type ErrorID string
 
+const (
+	Required ErrorID = "Required"
+)
+
 // ApplicationError ... アプリケーション固有のエラーを表す。
 type ApplicationError interface {
 	Error() string

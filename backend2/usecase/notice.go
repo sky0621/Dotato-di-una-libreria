@@ -1,8 +1,8 @@
 package usecase
 
 import (
+	"Dotato-di-una-libreria/backend2/domain/entity"
 	"Dotato-di-una-libreria/backend2/domain/error"
-	"Dotato-di-una-libreria/backend2/domain/model"
 	"Dotato-di-una-libreria/backend2/domain/repository"
 	"Dotato-di-una-libreria/backend2/usecase/input"
 	"context"
@@ -25,7 +25,7 @@ type noticeUsecase struct {
 
 // AddNotice ...
 func (u *noticeUsecase) AddNotice(ctx context.Context, input *input.Notice) error.ApplicationError {
-	var m *model.Notice
+	var m *entity.Notice
 	// FIXME: input -> model.Notice へのコンバーターを実装！
 	return u.commandRepository.Create(ctx, m)
 }
