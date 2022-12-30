@@ -17,10 +17,10 @@
     "@nuxtjs/axios": "^5.3.6",
     "cross-env": "^5.2.0",
     "firebase": "^5.8.2",
-    "nuxt": "^2.4.0",
+    "nuxt": "^3.0.0",
     "vuelidate": "^0.7.4",
     "vuetify": "^1.3.14",
-    "vuetify-loader": "^1.0.8"
+    "vuetify-loader": "^1.9.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",
@@ -30,17 +30,17 @@
     "babel-jest": "^23.6.0",
     "eslint": "^5.0.1",
     "eslint-config-standard": ">=12.0.0",
-    "eslint-loader": "^2.0.0",
+    "eslint-loader": "^4.0.2",
     "eslint-plugin-import": ">=2.14.0",
     "eslint-plugin-jest": ">=21.24.1",
     "eslint-plugin-node": ">=7.0.1",
     "eslint-plugin-promise": ">=4.0.1",
     "eslint-plugin-standard": ">=4.0.0",
     "eslint-plugin-vue": "^5.0.0",
-    "jest": "^23.6.0",
+    "jest": "^29.3.1",
     "nodemon": "^1.18.9",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2",
-    "vue-jest": "^3.0.2"
+    "stylus-loader": "^7.1.0",
+    "vue-jest": "^4.0.1"
   }
 }
